@@ -1,0 +1,15 @@
+faicons
+htmltools
+palmerpenguins
+pandas
+pyarrow
+plotly
+plotnine
+pyright
+ridgeplot
+scikit-learn
+seaborn
+shiny
+shinylive
+shinywidgets
+statsmodels
