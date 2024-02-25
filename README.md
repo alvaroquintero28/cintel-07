@@ -5,6 +5,9 @@
 
 Run and publish interactive apps using PyShiny Express and GitHub Pages.
 
+This is a teaching version of the app written for clarity and understanding.
+To contribute, please fork the repository and submit a pull request.
+
 ## Data Description
 
 This app uses the Palmer Penguins dataset which includes three penguin species observed on three islands in the Palmer Archipelago, Antarctica.
@@ -39,15 +42,17 @@ Before you start, have the following installed:
 - **Python**: Install the most recent version from [python.org](https://www.python.org/downloads/).
 - **Git**: Download and install Git from [git-scm.com](https://git-scm.com/downloads).
 - **Visual Studio Code (VS Code)**: Download from [code.visualstudio.com](https://code.visualstudio.com/).
-- **VS Code Extensions**: Install the Python extension for VS Code.
+- **VS Code Extensions**: Install the Python extension and the Shiny extension in VS Code.
 
 ### Configurations
 
-- **Configure Git**: Set up your user name and email with Git using the following commands in your terminal:
+- **Configure Git**: Set up your user name and email with Git using the following commands in your terminal.
+Change the values to your name and email address. This is a one-time setup.
 
   ```shell
   git config --global user.name "Your Name"
   git config --global user.email "youremail@example.com"
+  ```
 
 ## Set up the Project
 
@@ -61,8 +66,8 @@ Edit your README.md to reflect the commands that work on your machine.
 ### Verify Installations
 
 1. Open project folder in VS Code.
-2. Open a new terminal (on Windows, ensure the terminal type is PowerShell (not the old cmd)
-3. Run the following commands in the terminal one at a time::
+2. Open a new terminal - on Windows, ensure the terminal type is PowerShell (not the old cmd)
+3. Run the following commands in the terminal one at a time to verify installations.
 
 ```shell
 py --version
@@ -82,14 +87,19 @@ Use PowerShell on Windows or the terminal on macOS and Linux.
 Create a project virtual environment in the .venv folder of the project root directory.
 
   ```shell
-  py -m venv .venv`
+  py -m venv .venv
   ```
+
+Creating a project virtual environment is generally a one-time setup.
+Once the folder exists, we can activate it to work on the project.
+
+If VS Code pops up and says: We noticed a new environment has been created.
+Do you want to select it for the workspace folder? select Yes.
 
 ### Activate the Project Virtual Environment (when you work on the project)
 
 Once the project virtual environment exists,
  we activate the virtual environment to work on the project - or when we open a new terminal.
-We can verify our environment is active when (.venv) appears in the terminal prompt.
 
 On Windows:
 
@@ -103,8 +113,13 @@ On macOS and Linux:
   source .venv/bin/activate
   ```
 
-We also need to select this project virtual environment in VS Code.
-To do this, open the command palette (Ctrl+Shift+P) and search for "Python: Select Interpreter". Then, select the .venv folder in the project root directory.
+Verify: Generally when the environment is active, (.venv) will appear in the terminal prompt.
+
+We also need to select this project virtual environment in VS Code. To do this:
+
+1. Open the VS Code command palette (Ctrl+Shift+P).
+2. Search for "Python: Select Interpreter".
+3. Select the .venv folder in the project root directory.
 
 ### Install Packages into the Active Project Virtual Environment
 
@@ -116,17 +131,22 @@ NOTE:
 - We **install** packages into the project virtual environment.
 - We **import** packages into Python code (after they have been installed).
 
-First, upgrade pip and wheel for good measure.
-Then, install the project-specific required packages:
+First, upgrade pip and setuptools (core packages) for good measure.
+NOTE: Using the palmerpenguins package requires setuptools.
+Then, install the project-specific required packages.
+
+With the project virtual environment **active** in the terminal, run the following commands:
 
 ```shell
-py -m pip install --upgrade pip wheel
+py -m pip install --upgrade pip setuptools
 py -m pip install --upgrade -r requirements.txt
 ```
 
+Installing packages is generally a one-time setup.
+
 ## Run the App
 
-With your project virtual environment activated in the terminal
+With your project virtual environment **active** in the terminal
  and the necessary packages installed, run the app with live reloading and
  automatically open it in the browser:
 
@@ -139,13 +159,20 @@ Open a new terminal to run other commands.
 
 ## Build the App to Docs Folder and Test Locally
 
-With your project virtual environment activated in the terminal
+With your project virtual environment **active** in the terminal
  and the necessary packages installed, remove any existing assets and use
  shinylive export to build the app in the penguins folder to the docs folder:
 
 ```shell
 shiny static-assets remove
 shinylive export penguins docs
+```
+
+Optional: Edit docs/index.html to show a custom tab title and add a favicon.
+
+```html
+    <title>PyShiny Penguins</title>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
 ```
 
 After the app is built, serve the app locally from the docs folder to test before publishing to GitHub Pages.
@@ -179,7 +206,7 @@ After configuring the repository once, each time you push changes to the main br
 1. Go to the repository on GitHub and navigate to the **Settings** tab.
 2. Scroll down and click the **Pages** section.
 3. Select branch **main** as the source for the site.
-4. Select the **docs** folder to publish from.
+4. Change from the root folder to the **docs** folder to publish from.
 5. Click Save and wait for the site to build.
 6. Edit the "About" section of the repository to include a link to the live app.
 
@@ -190,11 +217,24 @@ Used for review only. In the app, we import the data from the palmerpenguins pac
 
 Palmer Penguins published in:
 
- Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer
+- Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer
 Archipelago (Antarctica) penguin data. R package version 0.1.0.
  <https://allisonhorst.github.io/palmerpenguins/>. doi:
 10.5281/zenodo.3960218.
 
 Data originally published in:
 
-Gorman KB, Williams TD, Fraser WR (2014). Ecological sexual dimorphism and environmental variability within a community of Antarctic penguins (genus Pygoscelis). PLoS ONE 9(3):e90081. <https://doi.org/10.1371/journal.pone.0090081>
+- Gorman KB, Williams TD, Fraser WR (2014). Ecological sexual dimorphism and environmental variability within a community of Antarctic penguins (genus Pygoscelis). PLoS ONE 9(3):e90081. <https://doi.org/10.1371/journal.pone.0090081>
+
+The Shiny development team. Shiny for Python [Computer software]. <https://github.com/posit-dev/py-shiny>
+
+## Screenshots
+
+Running the app locally.
+
+![Running the app locally](./images/LocalAppRunning.JPG)
+
+Serving the app locally from the docs folder.
+Notice the browser tab has a custom title and favicon.
+
+![Serving the app locally from the docs folder](./images/ServingAppLocally.JPG)

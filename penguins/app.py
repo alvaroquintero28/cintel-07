@@ -11,6 +11,10 @@ from shinywidgets import render_plotly  # For rendering Plotly plots
 from shiny import reactive, render, req  # To define reactive calculations
 from shiny.express import input, ui  # To define the user interface
 
+# --------------------------------------------------------
+# Get the Data
+# --------------------------------------------------------
+
 # ALWAYS familiarize yourself with the dataset you are working with first.
 # Column names for the penguins dataset include:
 # - species: penguin species (Chinstrap, Adelie, or Gentoo)
@@ -25,16 +29,25 @@ from shiny.express import input, ui  # To define the user interface
 # Use the built-in function to load the Palmer Penguins dataset
 penguins_df = palmerpenguins.load_penguins()
 
+# --------------------------------------------------------
+# Define User Interface (ui)
+# --------------------------------------------------------
+
 
 # Define the Shiny UI Page layout
-# Call the ui.page_opts() function to set the page title and make the page fillable
-ui.page_opts(title="PyShiny Express: Palmer Penguins Example", fillable=True)
+# Call the ui.page_opts() function
+# Set title to a string in quotes that will appear at the top
+# Set fillable to True to use the whole page width for the UI
+ui.page_opts(
+    title="PyShiny Express: Palmer Penguins Example", 
+    fillable=True
+    )
 
 # Add a Shiny UI sidebar for user interaction
 # Use the ui.sidebar() function to create a sidebar
-# Set the open parameter to "desktop" to make the sidebar open by default on a desktop
+# Set the open parameter to "open" to make the sidebar open by default
 # Use a with block to add content to the sidebar
-# Using Shiny Express there are no punctuation between ui elements
+# Using Shiny Express there is no punctuation between ui elements
 # Use the ui.h2() function to add a 2nd level header to the sidebar
 #   pass in a string argument (in quotes) to set the header text
 # Use ui.input_selectize() to create a dropdown input
@@ -68,7 +81,7 @@ ui.page_opts(title="PyShiny Express: Palmer Penguins Example", fillable=True)
 #   set the target parameter to "_blank" to open the link in a new tab
 # When passing in multiple arguments to a function, separate them with commas.
 
-with ui.sidebar(open="desktop"):
+with ui.sidebar(open="open"):
 
     ui.h2("Sidebar")
 
@@ -146,50 +159,55 @@ with ui.sidebar(open="desktop"):
 # They are used to render the Plotly and Seaborn plots in the UI.
 # Everything in the function (after the colon) will appear in the card
 
+# Wrap the two cards with histograms together
+# Use ui.layout_columns() to create a two-column layout
+# And indent the code to place the two cards in the columns
+with ui.layout_columns():
+
+    with ui.card(full_screen=True):
+        ui.card_header("Plotly Histogram")
+
+        @render_plotly
+        def plotly_histogram():
+            # Create a histogram using Plotly Express (aliased as px)
+            # Call px.histogram() function
+            # Pass in three arguments:
+            # the data as a pandas DataFrame (first argument, unnamed)
+            # a named argument named x set to the value returned from the input.selected_attribute() function
+            # a named argument nbins set to the user input bin count returned from the function input.plotly_bin_count() function
+            # Return the histogram created by the px.histogram() function
+            return px.histogram(
+                penguins_df, x=input.selected_attribute(), nbins=input.plotly_bin_count()
+            )
+
+
+    with ui.card(full_screen=True):
+        ui.card_header("Seaborn Histogram")
+
+        @render.plot(alt="A Seaborn histogram on penguin body mass in grams.")
+        def seaborn_histogram():
+            # Create a histogram using Seaborn (which we aliased as sns)
+            # Seaborn charts are a bit different
+            # You can't just return the chart - instead, we create
+            # a chart object, and call methods on it to set the title,
+            # x-axis label, and y-axis label
+            # Call sns.histplot() function
+            # Pass in three arguments:
+            # the data as a pandas DataFrame (first argument, unnamed)
+            # a named argument named x set to the value returned from the input.selected_attribute() function
+            # a named argument bins set to the user input bin count returned from the function input.seaborn_bin_count() function
+            # Return the histplot object we created and customized
+            histplot = sns.histplot(
+                data=penguins_df, x="body_mass_g", bins=input.seaborn_bin_count()
+            )
+            histplot.set_title("Palmer Penguins")
+            histplot.set_xlabel("Mass (g)")
+            histplot.set_ylabel("Count")
+            return histplot
+
+
 with ui.card(full_screen=True):
-    "Plotly Histogram"
-
-    @render_plotly
-    def plotly_histogram():
-        # Create a histogram using Plotly Express (aliased as px)
-        # Call px.histogram() function
-        # Pass in three arguments:
-        # the data as a pandas DataFrame (first argument, unnamed)
-        # a named argument named x set to the value returned from the input.selected_attribute() function
-        # a named argument nbins set to the user input bin count returned from the function input.plotly_bin_count() function
-        # Return the histogram created by the px.histogram() function
-        return px.histogram(
-            penguins_df, x=input.selected_attribute(), nbins=input.plotly_bin_count()
-        )
-
-
-with ui.card(full_screen=True):
-    "Seaborn Histogram"
-
-    @render.plot(alt="A Seaborn histogram on penguin body mass in grams.")
-    def seaborn_histogram():
-        # Create a histogram using Seaborn (which we aliased as sns)
-        # Seaborn charts are a bit different
-        # You can't just return the chart - instead, we create
-        # a chart object, and call methods on it to set the title,
-        # x-axis label, and y-axis label
-        # Call sns.histplot() function
-        # Pass in three arguments:
-        # the data as a pandas DataFrame (first argument, unnamed)
-        # a named argument named x set to the value returned from the input.selected_attribute() function
-        # a named argument bins set to the user input bin count returned from the function input.seaborn_bin_count() function
-        # Return the histplot object we created and customized
-        histplot = sns.histplot(
-            data=penguins_df, x="body_mass_g", bins=input.seaborn_bin_count()
-        )
-        histplot.set_title("Palmer Penguins")
-        histplot.set_xlabel("Mass (g)")
-        histplot.set_ylabel("Count")
-        return histplot
-
-
-with ui.card(full_screen=True):
-    "Plotly Scatterplot: Species"
+    ui.card_header("Plotly Scatterplot: Species")
 
     @render_plotly
     def plotly_scatterplot():
