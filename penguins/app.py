@@ -229,12 +229,12 @@ with ui.card(full_screen=True):
             x="bill_length_mm",
             y="body_mass_g",
             color="species",
-            title="Penguins Plot (Plotly Express))",
+            title="Penguins Plot (Plotly Express)",
             labels={
                 "bill_length_mm": "Bill Length (mm)",
                 "body_mass_g": "Body Mass (g)",
             },
-            size_max=8,
+            size_max=8, # set the maximum marker size
         )
 
 
