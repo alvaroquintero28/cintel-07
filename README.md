@@ -168,7 +168,14 @@ shiny static-assets remove
 shinylive export penguins docs
 ```
 
-Optional: Edit docs/index.html to show a custom tab title and add a favicon.
+**Optional:** Edit docs/index.html to show a custom tab title and add a favicon.
+
+This optional effort changes the HTML so the GitHub Pages web app will open in a tab with a custom title and favicon image. 
+For it to work, you'll need to first build your own favicon at https://favicon.io/.
+Open <https://favicon.io/>.
+Design an icon, e.g. using text & your initials. Set the colors and font. 
+Save the file as a zip file and extract (unzip) all the files somewhere on your machine.
+Copy the file named **favicon.ico** file to your project **docs** folder so your html file can find it.  
 
 ```html
     <title>PyShiny Penguins</title>
